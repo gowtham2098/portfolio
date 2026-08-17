@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-slate-700 antialiased dark:bg-slate-950 dark:text-slate-300;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-brand-500/25;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300 dark:bg-slate-700;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-20 sm:py-24 lg:py-28;
+  }
+
+  .card-base {
+    @apply rounded-2xl border border-slate-200/60 bg-white/80 shadow-sm backdrop-blur-sm
+           dark:border-slate-800/60 dark:bg-slate-900/40;
+    will-change: transform;
+  }
+
+  .card-glow {
+    @apply card-base relative overflow-hidden;
+  }
+  .card-glow::before {
+    content: "";
+    @apply pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-700;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    background: linear-gradient(
+      135deg,
+      rgba(51, 133, 255, 0.1),
+      rgba(45, 212, 191, 0.1),
+      rgba(51, 133, 255, 0.05)
+    );
+  }
+  .card-glow:hover::before {
+    @apply opacity-100;
+  }
+  .card-glow:hover {
+    @apply border-brand-200/60 shadow-xl shadow-brand-500/[0.08] dark:border-brand-800/40 dark:shadow-brand-500/[0.12];
+  }
+
+  .glass {
+    @apply border border-white/20 bg-white/60 shadow-lg backdrop-blur-xl
+           dark:border-white/5 dark:bg-white/5;
+  }
+
+  .tag-base {
+    @apply inline-flex items-center rounded-lg border border-slate-200/80 bg-slate-50/80 px-3 py-1.5
+           text-xs font-medium text-slate-600 backdrop-blur-sm
+           dark:border-slate-700/60 dark:bg-slate-800/40 dark:text-slate-300;
+    will-change: transform;
+    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tag-glow {
+    @apply tag-base relative;
+  }
+  .tag-glow:hover {
+    @apply border-brand-300 bg-brand-50 text-brand-700
+           dark:border-brand-700 dark:bg-brand-950/30 dark:text-brand-300;
+    box-shadow: 0 0 20px rgba(51, 133, 255, 0.15), 0 4px 12px rgba(51, 133, 255, 0.08);
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #1d66f5, #2dd4bf);
+  }
+
+  .gradient-border {
+    @apply relative rounded-2xl;
+    background:
+      linear-gradient(var(--bg, white), var(--bg, white)) padding-box,
+      linear-gradient(135deg, rgba(51, 133, 255, 0.3), rgba(45, 212, 191, 0.3))
+        border-box;
+    border: 1px solid transparent;
+  }
+  .dark .gradient-border {
+    --bg: rgb(15 23 42 / 0.4);
+  }
+
+  .section-bg-mesh {
+    @apply relative;
+    background-image:
+      radial-gradient(
+        at 20% 30%,
+        hsla(225, 100%, 74%, 0.08) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 70%,
+        hsla(189, 100%, 56%, 0.06) 0px,
+        transparent 50%
+      );
+  }
+  .dark .section-bg-mesh {
+    background-image:
+      radial-gradient(
+        at 20% 30%,
+        hsla(225, 100%, 74%, 0.12) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 70%,
+        hsla(189, 100%, 56%, 0.08) 0px,
+        transparent 50%
+      );
+  }
+
+  .section-bg-grid {
+    @apply relative bg-grid-pattern bg-grid dark:bg-grid-pattern-dark;
+  }
+
+  .section-bg-dots {
+    @apply relative bg-dot-pattern bg-dot dark:bg-dot-pattern-dark;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ── Hero parallax: CSS scroll-driven animations (compositor thread, zero main-thread cost) ── */
+/* Graceful degradation: orbs stay static in browsers without scrollTimeline support */
+
+.hero-orb-1 {
+  animation: hero-orb-1-scroll linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0% 60%;
+}
+.hero-orb-2 {
+  animation: hero-orb-2-scroll linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0% 60%;
+}
+.hero-text {
+  animation: hero-text-scroll linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0% 50%;
+}
+
+@keyframes hero-orb-1-scroll {
+  from { transform: translate(-50%, -50%) translateY(0); }
+  to   { transform: translate(-50%, -50%) translateY(-120px); }
+}
+@keyframes hero-orb-2-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-80px); }
+}
+@keyframes hero-text-scroll {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(60px); }
+}
+
+/* ── Status pill text rotation fade ── */
+@keyframes status-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-status-fade {
+  animation: status-fade-in 0.4s ease-out both;
+}

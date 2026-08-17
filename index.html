@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+
+    <title>Portfolio - Goutham S</title>
+    <meta
+      name="description"
+      content="Frontend Developer with 4+ years of React.js experience building scalable, high-performance web applications. TypeScript, React.js, Tailwind CSS."
+    />
+    <meta name="author" content="Goutham S" />
+    <meta
+      name="keywords"
+      content="Frontend Developer, React Developer, React.js, TypeScript, JavaScript, Tailwind CSS, Frontend Development, Goutham S"
+    />
+    <link rel="canonical" href="https://your-portfolio-url.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Goutham S — Frontend Developer & React.js Developer" />
+    <meta
+      property="og:description"
+      content="Frontend Developer with 4+ years of React.js experience building scalable, high-performance web applications."
+    />
+    <meta property="og:url" content="https://your-portfolio-url.com/" />
+    <meta property="og:site_name" content="Goutham S — Portfolio" />
+    <meta property="og:image" content="https://bolt.new/static/og_default.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Goutham S — Frontend Developer & React.js Developer" />
+    <meta
+      name="twitter:description"
+      content="Frontend Developer with 4+ years of React.js experience building scalable, high-performance web applications."
+    />
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
+
+    <!-- Fonts (non-render-blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Prevent FOUC: reset body margin and set matching background before CSS loads -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('portfolio-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored || (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      html, body { margin: 0; padding: 0; }
+      body { background-color: #fff; }
+      .dark body { background-color: #020617; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
