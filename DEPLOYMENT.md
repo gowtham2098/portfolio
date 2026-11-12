@@ -26,19 +26,28 @@ No secrets or tokens are required — the workflow uses the built-in `GITHUB_TOK
 
 ## How the base path works
 
-GitHub Pages project sites are served from `/<repo>/`, not `/`. So the workflow sets
-`BASE_PATH=/portfolio/` and `vite.config.ts` reads it:
+GitHub Pages project sites are served from `/<repo>/`, not `/`. The workflow asks
+`actions/configure-pages` for the site's `base_path` and passes it to the build:
+
+```yaml
+BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+```
+
+`vite.config.ts` reads it:
 
 ```ts
 base: process.env.BASE_PATH ?? '/',
 ```
 
-Locally and in any root-domain host, `BASE_PATH` is unset and the base stays `/`.
-If you rename the repo, the workflow derives the path automatically from the repo name.
+This means:
 
-If you later attach a **custom domain** (Settings > Pages > Custom domain), the site is
-served from `/` instead. In that case, change the build step in the workflow to
-`BASE_PATH: /` (or delete the `env` block for the build step).
+- `https://gowtham2098.github.io/portfolio/` → `/portfolio/`
+- A custom domain (served from `/`) → `/`
+- Pull requests (Pages not configured) → `/`
+- Local `npm run dev` / `npm run build` → `/`
+
+Renaming the repo or adding a custom domain needs no workflow change. On a custom domain,
+remember to add `public/CNAME` containing the domain.
 
 ## Notes
 

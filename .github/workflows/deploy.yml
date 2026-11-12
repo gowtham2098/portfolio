@@ -41,11 +41,16 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Configure Pages
+        id: pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
       - name: Build
         run: npm run build
         env:
-          # Project sites are served from https://<user>.github.io/<repo>/
-          BASE_PATH: /${{ github.event.repository.name }}/
+          # "/portfolio" for a project site, "" for a custom domain, "/" on PRs.
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -53,10 +58,6 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist
           retention-days: 7
-
-      - name: Configure Pages
-        if: github.event_name != 'pull_request'
-        uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
