@@ -1,9 +1,9 @@
-import { GraduationCap } from 'lucide-react';
-import type { EducationEntry } from '@/types/resume';
-import { SectionHeading } from './SectionHeading';
-import { Reveal } from './Reveal';
-import { motion } from 'framer-motion';
-import { staggerContainer, staggerItem, cardHover } from '@/utils/cn';
+import { GraduationCap } from "lucide-react";
+import type { EducationEntry } from "@/types/resume";
+import { SectionHeading } from "./SectionHeading";
+import { Reveal } from "./Reveal";
+import { motion } from "framer-motion";
+import { staggerContainer, staggerItem, cardHover } from "@/utils/cn";
 
 interface EducationProps {
   education: EducationEntry[];
@@ -13,8 +13,14 @@ export function Education({ education }: EducationProps) {
   if (education.length === 0) return null;
 
   return (
-    <section id="education" className="section-padding section-bg-dots relative overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-1/3 h-[400px] w-[400px] rounded-full bg-brand-400/5 blur-[80px] dark:bg-brand-500/8" />
+    <section
+      id="education"
+      className="section-padding section-bg-dots relative overflow-hidden"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 top-1/3 h-[400px] w-[400px] rounded-full bg-brand-400/5 blur-[80px] dark:bg-brand-500/8"
+      />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -28,11 +34,14 @@ export function Education({ education }: EducationProps) {
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, margin: '-40px', amount: 0.1 }}
+          viewport={{ once: true, margin: "-40px", amount: 0.1 }}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {education.map((entry) => (
-            <motion.div key={`${entry.degree}-${entry.year}`} variants={staggerItem}>
+            <motion.div
+              key={`${entry.degree}-${entry.year}`}
+              variants={staggerItem}
+            >
               <EducationCard entry={entry} />
             </motion.div>
           ))}
@@ -53,12 +62,18 @@ function EducationCard({ entry }: { entry: EducationEntry }) {
       <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-100 dark:bg-brand-950/30 dark:text-brand-400 dark:group-hover:bg-brand-900/30">
         <GraduationCap size={18} aria-hidden="true" />
       </div>
-      <h3 className="text-base font-bold text-slate-900 dark:text-white">{degree}</h3>
+      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+        {degree}
+      </h3>
       {institution && (
-        <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">{institution}</p>
+        <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+          {institution}
+        </p>
       )}
       {year && (
-        <p className="mt-2 font-mono text-xs text-slate-400 dark:text-slate-500">{year}</p>
+        <p className="mt-2 font-mono text-xs text-slate-400 dark:text-slate-500">
+          {year}
+        </p>
       )}
     </motion.article>
   );

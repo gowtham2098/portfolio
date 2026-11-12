@@ -1,17 +1,27 @@
-import { lazy, Suspense } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { Hero } from '@/components/Hero';
-import { About } from '@/components/About';
-import { Skills } from '@/components/Skills';
-import { Contact } from '@/components/Contact';
-import { Footer } from '@/components/Footer';
-import { useResume } from '@/hooks/useResume';
-import { useTheme } from '@/hooks/useTheme';
+import { lazy, Suspense } from "react";
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { Skills } from "@/components/Skills";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
+import { useResume } from "@/hooks/useResume";
+import { useTheme } from "@/hooks/useTheme";
 
-const Experience = lazy(() => import('@/components/Experience').then(m => ({ default: m.Experience })));
-const Projects = lazy(() => import('@/components/Projects').then(m => ({ default: m.Projects })));
-const Certifications = lazy(() => import('@/components/Certifications').then(m => ({ default: m.Certifications })));
-const Education = lazy(() => import('@/components/Education').then(m => ({ default: m.Education })));
+const Experience = lazy(() =>
+  import("@/components/Experience").then((m) => ({ default: m.Experience })),
+);
+const Projects = lazy(() =>
+  import("@/components/Projects").then((m) => ({ default: m.Projects })),
+);
+const Certifications = lazy(() =>
+  import("@/components/Certifications").then((m) => ({
+    default: m.Certifications,
+  })),
+);
+const Education = lazy(() =>
+  import("@/components/Education").then((m) => ({ default: m.Education })),
+);
 
 function SectionFallback() {
   return <div className="section-padding" />;

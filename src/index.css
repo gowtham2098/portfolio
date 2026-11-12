@@ -103,10 +103,11 @@
            text-xs font-medium text-slate-600 backdrop-blur-sm
            dark:border-slate-700/60 dark:bg-slate-800/40 dark:text-slate-300;
     will-change: transform;
-    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .tag-glow {
@@ -115,7 +116,9 @@
   .tag-glow:hover {
     @apply border-brand-300 bg-brand-50 text-brand-700
            dark:border-brand-700 dark:bg-brand-950/30 dark:text-brand-300;
-    box-shadow: 0 0 20px rgba(51, 133, 255, 0.15), 0 4px 12px rgba(51, 133, 255, 0.08);
+    box-shadow:
+      0 0 20px rgba(51, 133, 255, 0.15),
+      0 4px 12px rgba(51, 133, 255, 0.08);
   }
 
   .gradient-text {
@@ -196,22 +199,42 @@
 }
 
 @keyframes hero-orb-1-scroll {
-  from { transform: translate(-50%, -50%) translateY(0); }
-  to   { transform: translate(-50%, -50%) translateY(-120px); }
+  from {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  to {
+    transform: translate(-50%, -50%) translateY(-120px);
+  }
 }
 @keyframes hero-orb-2-scroll {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-80px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-80px);
+  }
 }
 @keyframes hero-text-scroll {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(60px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(60px);
+  }
 }
 
 /* ── Status pill text rotation fade ── */
 @keyframes status-fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .animate-status-fade {
   animation: status-fade-in 0.4s ease-out both;
