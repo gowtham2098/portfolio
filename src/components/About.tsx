@@ -1,9 +1,9 @@
-import { Briefcase, GraduationCap, MapPin, Mail } from 'lucide-react';
-import type { ResumeData } from '@/types/resume';
-import { SectionHeading } from './SectionHeading';
-import { Reveal } from './Reveal';
-import { motion } from 'framer-motion';
-import { staggerContainer, staggerItem, cardHover } from '@/utils/cn';
+import { Briefcase, GraduationCap, MapPin, Mail } from "lucide-react";
+import type { ResumeData } from "@/types/resume";
+import { SectionHeading } from "./SectionHeading";
+import { Reveal } from "./Reveal";
+import { motion } from "framer-motion";
+import { staggerContainer, staggerItem, cardHover } from "@/utils/cn";
 
 interface AboutProps {
   resume: ResumeData;
@@ -11,18 +11,29 @@ interface AboutProps {
 
 export function About({ resume }: AboutProps) {
   const { summary, contact, experience, languages } = resume;
-  const yearsExperience = experience.length > 0 ? '4+ years' : 'Frontend';
+  const yearsExperience = experience.length > 0 ? "4+ years" : "Frontend";
 
   const facts = [
-    { icon: Briefcase, label: 'Experience', value: yearsExperience },
-    { icon: MapPin, label: 'Location', value: contact.location || 'India' },
-    { icon: GraduationCap, label: 'Focus', value: 'React · TypeScript' },
-    { icon: Mail, label: 'Email', value: contact.email || '—', href: contact.email ? `mailto:${contact.email}` : undefined },
+    { icon: Briefcase, label: "Experience", value: yearsExperience },
+    { icon: MapPin, label: "Location", value: contact.location || "India" },
+    { icon: GraduationCap, label: "Focus", value: "React · TypeScript" },
+    {
+      icon: Mail,
+      label: "Email",
+      value: contact.email || "—",
+      href: contact.email ? `mailto:${contact.email}` : undefined,
+    },
   ];
 
   return (
-    <section id="about" className="section-padding section-bg-mesh relative overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-1/4 h-[400px] w-[400px] rounded-full bg-brand-400/5 blur-[80px] dark:bg-brand-500/8" />
+    <section
+      id="about"
+      className="section-padding section-bg-mesh relative overflow-hidden"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 top-1/4 h-[400px] w-[400px] rounded-full bg-brand-400/5 blur-[80px] dark:bg-brand-500/8"
+      />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -40,7 +51,9 @@ export function About({ resume }: AboutProps) {
 
             {languages.length > 0 && (
               <div className="mt-8 flex flex-wrap items-center gap-2.5">
-                <span className="font-mono text-sm text-slate-500 dark:text-slate-400">Languages:</span>
+                <span className="font-mono text-sm text-slate-500 dark:text-slate-400">
+                  Languages:
+                </span>
                 {languages.map((lang) => (
                   <span key={lang} className="tag-glow">
                     {lang}
@@ -74,8 +87,15 @@ export function About({ resume }: AboutProps) {
                   </dt>
                   <dd className="mt-1.5 text-sm font-semibold break-words text-slate-900 dark:text-white">
                     {href ? (
-                      <a href={href} className="transition-colors duration-300 hover:text-brand-600 dark:hover:text-brand-400">{value}</a>
-                    ) : value}
+                      <a
+                        href={href}
+                        className="transition-colors duration-300 hover:text-brand-600 dark:hover:text-brand-400"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      value
+                    )}
                   </dd>
                 </motion.div>
               ))}

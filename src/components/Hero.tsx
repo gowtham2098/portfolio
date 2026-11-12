@@ -1,6 +1,6 @@
-import { ArrowDown, Download, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowDown, Download, Github, Linkedin, Loader2, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import type { ResumeData } from '@/types/resume';
 import { downloadResumePdf } from '@/utils/download';
 import { staggerContainer, staggerItem, buttonHoverSolid, buttonHover, iconPop } from '@/utils/cn';
@@ -9,31 +9,52 @@ const STATUSES = [
   'Available for opportunities',
   'Immediate Joiner',
   'Open to work',
-];
+] as const;
+
+const STATUS_INTERVAL_MS = 2000;
 
 interface HeroProps {
   resume: ResumeData;
 }
 
-export function Hero({ resume }: HeroProps) {
-  const { name, title, summary, contact } = resume;
-  const [mounted, setMounted] = useState(false);
+// Keeps the 2s state update local: only this pill re-renders, not the hero.
+function StatusPill() {
   const [statusIndex, setStatusIndex] = useState(0);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
+    const id = window.setInterval(() => {
+      setStatusIndex((prev) => (prev + 1) % STATUSES.length);
+    }, STATUS_INTERVAL_MS);
+    return () => window.clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStatusIndex(Math.floor(Math.random() * STATUSES.length));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  return (
+    <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1.5 font-mono text-xs font-medium text-slate-600 shadow-sm backdrop-blur-md dark:border-slate-700/50 dark:bg-slate-900/60 dark:text-slate-300">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75 dark:bg-brand-300" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500 dark:bg-brand-400" />
+      </span>
+      <span key={statusIndex} className="inline-block animate-status-fade">
+        {STATUSES[statusIndex]}
+      </span>
+    </p>
+  );
+}
 
-  const handleDownload = () => {
-    downloadResumePdf(resume);
+export const Hero = memo(function Hero({ resume }: HeroProps) {
+  const { name, title, summary, contact } = resume;
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    try {
+      await downloadResumePdf(resume);
+    } catch (error) {
+      console.error('Failed to generate resume PDF', error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -52,18 +73,10 @@ export function Hero({ resume }: HeroProps) {
 
       <div className="hero-text section-container w-full">
         <div className="max-w-3xl">
-          <motion.div variants={staggerContainer} initial="initial" animate={mounted ? 'animate' : 'initial'}>
+          <motion.div variants={staggerContainer} initial="initial" animate="animate">
             {/* Status pill */}
             <motion.div variants={staggerItem}>
-              <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1.5 font-mono text-xs font-medium text-slate-600 shadow-sm backdrop-blur-md dark:border-slate-700/50 dark:bg-slate-900/60 dark:text-slate-300">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75 dark:bg-brand-300" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500 dark:bg-brand-400" />
-                </span>
-                <span key={statusIndex} className="inline-block animate-status-fade">
-                  {STATUSES[statusIndex]}
-                </span>
-              </p>
+              <StatusPill />
             </motion.div>
 
             {/* Name */}
@@ -105,12 +118,18 @@ export function Hero({ resume }: HeroProps) {
 
               <motion.button
                 type="button"
-                onClick={handleDownload}
-                {...buttonHover}
-                className="group inline-flex items-center gap-2.5 rounded-xl border border-slate-300/60 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-200"
+                onClick={() => { void handleDownload(); }}
+                disabled={isDownloading}
+                aria-busy={isDownloading}
+                {...(isDownloading ? {} : buttonHover)}
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-slate-300/60 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-70 dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-200"
               >
-                <Download size={16} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5" aria-hidden="true" />
-                Download Resume
+                {isDownloading ? (
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <Download size={16} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5" aria-hidden="true" />
+                )}
+                {isDownloading ? 'Preparing…' : 'Download Resume'}
               </motion.button>
 
               <div className="flex items-center gap-2.5">
@@ -163,4 +182,4 @@ export function Hero({ resume }: HeroProps) {
       </a>
     </section>
   );
-}
+});

@@ -1,9 +1,9 @@
-import { Award } from 'lucide-react';
-import type { CertificationEntry } from '@/types/resume';
-import { SectionHeading } from './SectionHeading';
-import { Reveal } from './Reveal';
-import { motion } from 'framer-motion';
-import { staggerContainer, staggerItem, cardHover } from '@/utils/cn';
+import { Award } from "lucide-react";
+import type { CertificationEntry } from "@/types/resume";
+import { SectionHeading } from "./SectionHeading";
+import { Reveal } from "./Reveal";
+import { motion } from "framer-motion";
+import { staggerContainer, staggerItem, cardHover } from "@/utils/cn";
 
 interface CertificationsProps {
   certifications: CertificationEntry[];
@@ -13,8 +13,14 @@ export function Certifications({ certifications }: CertificationsProps) {
   if (certifications.length === 0) return null;
 
   return (
-    <section id="certifications" className="section-padding section-bg-mesh relative overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute -left-40 bottom-1/4 h-[400px] w-[400px] rounded-full bg-accent-400/5 blur-[80px] dark:bg-accent-500/8" />
+    <section
+      id="certifications"
+      className="section-padding section-bg-mesh relative overflow-hidden"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 bottom-1/4 h-[400px] w-[400px] rounded-full bg-accent-400/5 blur-[80px] dark:bg-accent-500/8"
+      />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -28,7 +34,7 @@ export function Certifications({ certifications }: CertificationsProps) {
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, margin: '-40px', amount: 0.1 }}
+          viewport={{ once: true, margin: "-40px", amount: 0.1 }}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {certifications.map((cert) => (
@@ -53,13 +59,21 @@ function CertificationCard({ cert }: { cert: CertificationEntry }) {
       <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-100 dark:bg-brand-950/30 dark:text-brand-400 dark:group-hover:bg-brand-900/30">
         <Award size={18} aria-hidden="true" />
       </div>
-      <h3 className="text-base font-bold text-slate-900 dark:text-white">{name}</h3>
+      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+        {name}
+      </h3>
       <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
         {issuer}
-        {year && <span className="ml-2 font-mono text-xs text-slate-400">· {year}</span>}
+        {year && (
+          <span className="ml-2 font-mono text-xs text-slate-400">
+            · {year}
+          </span>
+        )}
       </p>
       {description && (
-        <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{description}</p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          {description}
+        </p>
       )}
     </motion.article>
   );
