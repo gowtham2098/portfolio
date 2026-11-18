@@ -1,31 +1,15 @@
-import { lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
+import { Experience } from "@/components/Experience";
+import { Projects } from "@/components/Projects";
+import { Certifications } from "@/components/Certifications";
+import { Education } from "@/components/Education";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { useResume } from "@/hooks/useResume";
 import { useTheme } from "@/hooks/useTheme";
-
-const Experience = lazy(() =>
-  import("@/components/Experience").then((m) => ({ default: m.Experience })),
-);
-const Projects = lazy(() =>
-  import("@/components/Projects").then((m) => ({ default: m.Projects })),
-);
-const Certifications = lazy(() =>
-  import("@/components/Certifications").then((m) => ({
-    default: m.Certifications,
-  })),
-);
-const Education = lazy(() =>
-  import("@/components/Education").then((m) => ({ default: m.Education })),
-);
-
-function SectionFallback() {
-  return <div className="section-padding" />;
-}
 
 function App() {
   const resume = useResume();
@@ -51,18 +35,10 @@ function App() {
         <Hero resume={resume} />
         <About resume={resume} />
         <Skills skills={resume.skills} />
-        <Suspense fallback={<SectionFallback />}>
-          <Experience experience={resume.experience} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <Projects projects={resume.projects} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <Certifications certifications={resume.certifications} />
-        </Suspense>
-        <Suspense fallback={<SectionFallback />}>
-          <Education education={resume.education} />
-        </Suspense>
+        <Experience experience={resume.experience} />
+        <Projects projects={resume.projects} />
+        <Certifications certifications={resume.certifications} />
+        <Education education={resume.education} />
         <Contact contact={resume.contact} name={resume.name} />
       </main>
 
