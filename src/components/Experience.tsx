@@ -1,8 +1,7 @@
 import type { ExperienceEntry } from "@/types/resume";
 import { SectionHeading } from "./SectionHeading";
+import { SectionBackdrop } from "./SectionBackdrop";
 import { Reveal } from "./Reveal";
-import { motion } from "framer-motion";
-import { cardHover } from "@/utils/cn";
 
 interface ExperienceProps {
   experience: ExperienceEntry[];
@@ -31,12 +30,9 @@ export function Experience({ experience }: ExperienceProps) {
   return (
     <section
       id="experience"
-      className="section-padding section-bg-grid relative overflow-hidden"
+      className="section-padding relative isolate overflow-hidden"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-1/3 h-[500px] w-[500px] rounded-full bg-accent-400/5 blur-[100px] dark:bg-accent-500/8"
-      />
+      <SectionBackdrop variant="grid" />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -79,10 +75,7 @@ function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
   const { role, company, duration, responsibilities, technologies } = entry;
 
   return (
-    <motion.article
-      {...cardHover}
-      className="group relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-900/40"
-    >
+    <article className="group relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 backdrop-blur-sm transition-transform duration-300 ease-out hover:-translate-y-1 dark:border-slate-800/60 dark:bg-slate-900/40">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
       {/* Header */}
@@ -138,6 +131,6 @@ function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
           </ul>
         )}
       </div>
-    </motion.article>
+    </article>
   );
 }

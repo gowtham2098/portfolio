@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Download, Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { downloadResumePdf } from "@/utils/download";
 import { cn } from "@/utils/cn";
@@ -20,32 +19,6 @@ const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
-
-const menuVariants = {
-  closed: {
-    opacity: 0,
-    height: 0,
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] as const },
-  },
-  open: {
-    opacity: 1,
-    height: "auto",
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
-
-const menuItemVariants = {
-  closed: { opacity: 0, x: -16 },
-  open: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      delay: i * 0.06,
-      duration: 0.4,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  }),
-};
 
 export function Navbar({ theme, toggleTheme, name, resume }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
@@ -140,25 +113,19 @@ export function Navbar({ theme, toggleTheme, name, resume }: NavbarProps) {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id="mobile-menu"
-            variants={menuVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            className="overflow-hidden border-t border-slate-200/50 bg-white/90 px-5 py-4 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-950/90 md:hidden"
-          >
+      {/* Always mounted so open/close both animate, but visibility:hidden keeps
+          the links out of the tab order and accessibility tree while closed. */}
+      <div
+        id="mobile-menu"
+        data-open={menuOpen}
+        aria-hidden={!menuOpen}
+        className="mobile-menu md:hidden"
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-slate-200/50 bg-white/90 px-5 py-4 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-950/90">
             <ul className="flex flex-col gap-1">
               {NAV_LINKS.map((link, i) => (
-                <motion.li
-                  key={link.href}
-                  custom={i}
-                  variants={menuItemVariants}
-                  initial="closed"
-                  animate="open"
-                >
+                <li key={link.href} style={{ "--i": i } as CSSProperties}>
                   <a
                     href={link.href}
                     onClick={closeMenu}
@@ -166,26 +133,24 @@ export function Navbar({ theme, toggleTheme, name, resume }: NavbarProps) {
                   >
                     {link.label}
                   </a>
-                </motion.li>
+                </li>
               ))}
             </ul>
-            <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.4 }}
+            <button
               type="button"
               onClick={() => {
                 handleDownload();
                 closeMenu();
               }}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all duration-300 hover:from-brand-700 hover:to-brand-800"
+              style={{ "--i": NAV_LINKS.length } as CSSProperties}
+              className="mobile-menu-cta mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all duration-300 hover:from-brand-700 hover:to-brand-800"
             >
               <Download size={16} aria-hidden="true" />
               Download Resume
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

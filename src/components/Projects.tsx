@@ -1,9 +1,8 @@
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import type { ProjectEntry } from "@/types/resume";
 import { SectionHeading } from "./SectionHeading";
+import { SectionBackdrop } from "./SectionBackdrop";
 import { Reveal } from "./Reveal";
-import { motion } from "framer-motion";
-import { staggerContainer, staggerItem, cardHover } from "@/utils/cn";
 
 interface ProjectsProps {
   projects: ProjectEntry[];
@@ -13,18 +12,11 @@ export function Projects({ projects }: ProjectsProps) {
   if (projects.length === 0) return null;
 
   return (
-    <section id="projects" className="section-padding relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-      >
-        <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-brand-400/5 blur-[120px] dark:bg-brand-500/8" />
-        <div className="absolute -left-40 bottom-0 h-[400px] w-[400px] rounded-full bg-accent-400/5 blur-[100px] dark:bg-accent-500/6" />
-        <div
-          className="absolute inset-0 bg-grid-pattern opacity-30 dark:bg-grid-pattern-dark dark:opacity-20"
-          style={{ backgroundSize: "60px 60px" }}
-        />
-      </div>
+    <section
+      id="projects"
+      className="section-padding relative isolate overflow-hidden"
+    >
+      <SectionBackdrop variant="beam" tint />
 
       <div className="section-container">
         <Reveal>
@@ -35,19 +27,13 @@ export function Projects({ projects }: ProjectsProps) {
           />
         </Reveal>
 
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-40px", amount: 0.1 }}
-          className="grid gap-6 md:grid-cols-2"
-        >
-          {projects.map((project) => (
-            <motion.div key={project.name} variants={staggerItem}>
+        <div className="grid gap-6 md:grid-cols-2">
+          {projects.map((project, index) => (
+            <Reveal key={project.name} delay={index * 90}>
               <ProjectCard project={project} />
-            </motion.div>
+            </Reveal>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -59,10 +45,7 @@ function ProjectCard({ project }: { project: ProjectEntry }) {
   const hasLinks = Boolean(liveUrl || githubUrl);
 
   return (
-    <motion.article
-      {...cardHover}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-7 backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-900/40"
-    >
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-7 backdrop-blur-sm transition-transform duration-300 ease-out hover:-translate-y-1 dark:border-slate-800/60 dark:bg-slate-900/40">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
       <div className="flex items-start justify-between gap-3">
@@ -139,6 +122,6 @@ function ProjectCard({ project }: { project: ProjectEntry }) {
           ))}
         </ul>
       )}
-    </motion.article>
+    </article>
   );
 }

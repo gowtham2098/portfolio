@@ -1,12 +1,13 @@
 import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
 import type { ContactInfo } from "@/types/resume";
-import { staggerContainer, staggerItem, iconPop } from "@/utils/cn";
 
 interface FooterProps {
   name: string;
   contact: ContactInfo;
 }
+
+const iconLinkClass =
+  "inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 backdrop-blur-sm transition-transform duration-300 hover:-translate-y-0.5 hover:scale-110 active:scale-95 dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300";
 
 export function Footer({ name, contact }: FooterProps) {
   const year = new Date().getFullYear();
@@ -26,60 +27,42 @@ export function Footer({ name, contact }: FooterProps) {
             </p>
           </div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="flex items-center gap-2.5"
-          >
+          <div className="flex items-center gap-2.5">
             {contact.email && (
-              <motion.a
-                variants={staggerItem}
+              <a
                 href={`mailto:${contact.email}`}
                 aria-label="Email"
-                {...iconPop}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                className={iconLinkClass}
               >
                 <Mail size={16} aria-hidden="true" />
-              </motion.a>
+              </a>
             )}
             {contact.github && (
-              <motion.a
-                variants={staggerItem}
+              <a
                 href={contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                {...iconPop}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                className={iconLinkClass}
               >
                 <Github size={16} aria-hidden="true" />
-              </motion.a>
+              </a>
             )}
             {contact.linkedin && (
-              <motion.a
-                variants={staggerItem}
+              <a
                 href={contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                {...iconPop}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                className={iconLinkClass}
               >
                 <Linkedin size={16} aria-hidden="true" />
-              </motion.a>
+              </a>
             )}
-            <motion.a
-              variants={staggerItem}
-              href="#top"
-              aria-label="Back to top"
-              {...iconPop}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
-            >
+            <a href="#top" aria-label="Back to top" className={iconLinkClass}>
               <ArrowUp size={16} aria-hidden="true" />
-            </motion.a>
-          </motion.div>
+            </a>
+          </div>
         </div>
       </div>
     </footer>

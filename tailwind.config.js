@@ -25,8 +25,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['"Inter"', '"Inter Fallback"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', '"JetBrains Mono Fallback"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       maxWidth: {
         content: '72rem',

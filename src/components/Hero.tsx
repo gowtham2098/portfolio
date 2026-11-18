@@ -1,14 +1,21 @@
-import { ArrowDown, Download, Github, Linkedin, Loader2, Mail } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { memo, useEffect, useState } from 'react';
-import type { ResumeData } from '@/types/resume';
-import { downloadResumePdf } from '@/utils/download';
-import { staggerContainer, staggerItem, buttonHoverSolid, buttonHover, iconPop } from '@/utils/cn';
+import {
+  ArrowDown,
+  Download,
+  Github,
+  Linkedin,
+  Loader2,
+  Mail,
+} from "lucide-react";
+import { memo, useEffect, useState } from "react";
+import type { ResumeData } from "@/types/resume";
+import { useHeroSpotlight } from "@/hooks/useHeroSpotlight";
+import { downloadResumePdf } from "@/utils/download";
+import CodeWindow from "./CodeWindow";
 
 const STATUSES = [
-  'Available for opportunities',
-  'Immediate Joiner',
-  'Open to work',
+  "Available for opportunities",
+  "Immediate Joiner",
+  "Open to work",
 ] as const;
 
 const STATUS_INTERVAL_MS = 2000;
@@ -29,7 +36,7 @@ function StatusPill() {
   }, []);
 
   return (
-    <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-slate-200/60 bg-white/70 px-4 py-1.5 font-mono text-xs font-medium text-slate-600 shadow-sm backdrop-blur-md dark:border-slate-700/50 dark:bg-slate-900/60 dark:text-slate-300">
+    <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-slate-200/70 bg-white/80 px-4 py-1.5 font-mono text-xs font-medium text-slate-600 shadow-sm backdrop-blur-md dark:border-slate-700/50 dark:bg-slate-900/60 dark:text-slate-300">
       <span className="relative flex h-2 w-2">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75 dark:bg-brand-300" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500 dark:bg-brand-400" />
@@ -41,9 +48,12 @@ function StatusPill() {
   );
 }
 
+/* ── Decorative code window ─────────────────────────────────────────────── */
+
 export const Hero = memo(function Hero({ resume }: HeroProps) {
   const { name, title, summary, contact } = resume;
   const [isDownloading, setIsDownloading] = useState(false);
+  const { sectionRef, spotRef } = useHeroSpotlight();
 
   const handleDownload = async () => {
     if (isDownloading) return;
@@ -51,7 +61,7 @@ export const Hero = memo(function Hero({ resume }: HeroProps) {
     try {
       await downloadResumePdf(resume);
     } catch (error) {
-      console.error('Failed to generate resume PDF', error);
+      console.error("Failed to generate resume PDF", error);
     } finally {
       setIsDownloading(false);
     }
@@ -60,116 +70,149 @@ export const Hero = memo(function Hero({ resume }: HeroProps) {
   return (
     <section
       id="top"
-      className="hero-section relative flex min-h-screen items-center overflow-hidden pt-16"
+      ref={sectionRef}
+      className="hero-section relative isolate flex min-h-screen items-center overflow-hidden pt-16"
       aria-label="Introduction"
     >
-      {/* Animated gradient mesh background — CSS scroll-driven animations */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="hero-orb-1 absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-brand-400/20 via-brand-500/10 to-accent-400/15 blur-[100px] dark:from-brand-500/25 dark:via-brand-600/15 dark:to-accent-500/20" />
+      {/* Layered background: theme-aware artwork, wash, glow, grid and grain */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <img
+          src="/hero/hero-light.svg"
+          alt=""
+          decoding="async"
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full object-cover object-[72%_50%] opacity-90 dark:hidden"
+        />
+        <img
+          src="/hero/hero-dark.svg"
+          alt=""
+          decoding="async"
+          className="absolute inset-0 hidden h-full w-full object-cover object-[72%_50%] opacity-95 dark:block"
+        />
+
+        {/* Theme wash — guarantees text contrast over the artwork */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/30 dark:from-slate-950 dark:via-slate-950/90 dark:to-slate-950/45 sm:to-white/15 dark:sm:to-slate-950/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent dark:from-slate-950 dark:via-transparent" />
+
+        {/* Soft moving glow */}
+        <div className="hero-orb-1 absolute left-1/2 top-1/4 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-brand-400/20 via-brand-500/10 to-accent-400/15 blur-[100px] dark:from-brand-500/25 dark:via-brand-600/15 dark:to-accent-500/20" />
         <div className="hero-orb-2 absolute -right-20 bottom-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-tl from-accent-400/15 via-brand-300/10 to-transparent blur-[80px] dark:from-accent-500/20 dark:via-brand-400/10" />
-        <div className="absolute -left-32 top-1/3 h-[300px] w-[300px] rounded-full bg-brand-300/10 blur-[60px] dark:bg-brand-400/15" />
-        <div className="absolute inset-0 bg-grid-pattern opacity-40 dark:bg-grid-pattern-dark dark:opacity-30" style={{ backgroundSize: '80px 80px' }} />
+
+        {/* Fine grid + film grain */}
+        <div
+          className="absolute inset-0 bg-grid-pattern opacity-40 dark:bg-grid-pattern-dark dark:opacity-25"
+          style={{ backgroundSize: "80px 80px" }}
+        />
+        <div className="hero-grain absolute inset-0" />
+
+        {/* Pointer-tracked glow (desktop only) */}
+        <div ref={spotRef} className="hero-spotlight" data-active="false" />
       </div>
 
       <div className="hero-text section-container w-full">
-        <div className="max-w-3xl">
-          <motion.div variants={staggerContainer} initial="initial" animate="animate">
+        <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,430px)] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,520px)] xl:gap-16">
+          <div className="max-w-2xl">
             {/* Status pill */}
-            <motion.div variants={staggerItem}>
+            <div>
               <StatusPill />
-            </motion.div>
+            </div>
 
             {/* Name */}
-            <motion.h1
-              variants={staggerItem}
-              className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl lg:text-7xl"
-            >
+            <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl lg:text-6xl xl:text-7xl">
               {name}
-            </motion.h1>
+            </h1>
 
             {/* Title with gradient */}
-            <motion.p
-              variants={staggerItem}
-              className="mt-5 text-xl font-semibold sm:text-2xl lg:text-3xl"
-            >
+            <p className="mt-5 text-xl font-semibold sm:text-2xl lg:text-3xl">
               <span className="gradient-text">{title}</span>
-            </motion.p>
+            </p>
 
             {/* Summary */}
             {summary && (
-              <motion.p
-                variants={staggerItem}
-                className="mt-7 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg"
-              >
+              <p className="mt-7 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg">
                 {summary}
-              </motion.p>
+              </p>
             )}
 
             {/* CTAs */}
-            <motion.div variants={staggerItem} className="mt-10 flex flex-wrap items-center gap-4">
-              <motion.a
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <a
                 href="#projects"
-                {...buttonHoverSolid}
-                className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25"
+                className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-xl hover:shadow-brand-600/30 active:scale-[0.98]"
               >
                 View Projects
-                <ArrowDown size={16} className="transition-transform duration-300 ease-out group-hover:translate-y-0.5" aria-hidden="true" />
-              </motion.a>
+                <ArrowDown
+                  size={16}
+                  className="transition-transform duration-300 ease-out group-hover:translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </a>
 
-              <motion.button
+              <button
                 type="button"
-                onClick={() => { void handleDownload(); }}
+                onClick={() => {
+                  void handleDownload();
+                }}
                 disabled={isDownloading}
                 aria-busy={isDownloading}
-                {...(isDownloading ? {} : buttonHover)}
-                className="group inline-flex items-center gap-2.5 rounded-xl border border-slate-300/60 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm disabled:cursor-not-allowed disabled:opacity-70 dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-200"
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-slate-300/70 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:scale-100 dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-200"
               >
                 {isDownloading ? (
-                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                  <Loader2
+                    size={16}
+                    className="animate-spin"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <Download size={16} className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5" aria-hidden="true" />
+                  <Download
+                    size={16}
+                    className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5"
+                    aria-hidden="true"
+                  />
                 )}
-                {isDownloading ? 'Preparing…' : 'Download Resume'}
-              </motion.button>
+                {isDownloading ? "Preparing…" : "Download Resume"}
+              </button>
 
               <div className="flex items-center gap-2.5">
                 {contact.email && (
-                  <motion.a
+                  <a
                     href={`mailto:${contact.email}`}
                     aria-label="Send email"
-                    {...iconPop}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur-md transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:scale-110 active:scale-95 dark:border-slate-700/60 dark:bg-slate-900/70 dark:text-slate-300"
                   >
                     <Mail size={18} aria-hidden="true" />
-                  </motion.a>
+                  </a>
                 )}
                 {contact.linkedin && (
-                  <motion.a
+                  <a
                     href={contact.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn profile"
-                    {...iconPop}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur-md transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:scale-110 active:scale-95 dark:border-slate-700/60 dark:bg-slate-900/70 dark:text-slate-300"
                   >
                     <Linkedin size={18} aria-hidden="true" />
-                  </motion.a>
+                  </a>
                 )}
                 {contact.github && (
-                  <motion.a
+                  <a
                     href={contact.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="GitHub profile"
-                    {...iconPop}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/60 dark:text-slate-300"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-300/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur-md transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:scale-110 active:scale-95 dark:border-slate-700/60 dark:bg-slate-900/70 dark:text-slate-300"
                   >
                     <Github size={18} aria-hidden="true" />
-                  </motion.a>
+                  </a>
                 )}
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
+
+          <CodeWindow />
         </div>
       </div>
 

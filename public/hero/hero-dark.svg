@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#060a13" />
+      <stop offset="0.55" stop-color="#0a1224" />
+      <stop offset="1" stop-color="#05080f" />
+    </linearGradient>
+
+    <radialGradient id="blue">
+      <stop offset="0" stop-color="#3385ff" stop-opacity="0.55" />
+      <stop offset="0.5" stop-color="#3385ff" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#3385ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="teal">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.42" />
+      <stop offset="0.55" stop-color="#2dd4bf" stop-opacity="0.13" />
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="indigo">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.36" />
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#8ec6ff" stroke-opacity="0.06" stroke-width="1" />
+    </pattern>
+
+    <radialGradient id="fade" cx="64%" cy="52%" r="62%">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <mask id="fadeMask">
+      <rect width="1920" height="1080" fill="url(#fade)" />
+    </mask>
+
+    <linearGradient id="panelFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.015" />
+    </linearGradient>
+    <linearGradient id="panelStroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8ec6ff" stop-opacity="0.32" />
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0.06" />
+    </linearGradient>
+
+    <linearGradient id="streak" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8ec6ff" stop-opacity="0" />
+      <stop offset="0.5" stop-color="#8ec6ff" stop-opacity="0.1" />
+      <stop offset="1" stop-color="#8ec6ff" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="80" />
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#base)" />
+
+  <g filter="url(#soft)">
+    <ellipse cx="1300" cy="380" rx="640" ry="440" fill="url(#blue)" />
+    <ellipse cx="1620" cy="880" rx="540" ry="380" fill="url(#teal)" />
+    <ellipse cx="980" cy="40" rx="560" ry="300" fill="url(#indigo)" />
+    <ellipse cx="180" cy="980" rx="420" ry="300" fill="url(#blue)" opacity="0.35" />
+  </g>
+
+  <rect width="1920" height="1080" fill="url(#grid)" mask="url(#fadeMask)" />
+
+  <path d="M1180 -120 L1500 -120 L960 1200 L620 1200 Z" fill="url(#streak)" />
+  <path d="M1560 -120 L1610 -120 L1130 1200 L1080 1200 Z" fill="url(#streak)" opacity="0.6" />
+
+  <g fill="url(#panelFill)" stroke="url(#panelStroke)" stroke-width="1.2">
+    <rect x="1180" y="230" width="380" height="230" rx="24" transform="rotate(-7 1370 345)" />
+    <rect x="1430" y="520" width="280" height="180" rx="20" transform="rotate(9 1570 610)" />
+    <rect x="975" y="700" width="240" height="150" rx="18" transform="rotate(-4 1095 775)" />
+    <rect x="1640" y="150" width="160" height="110" rx="16" transform="rotate(-12 1720 205)" opacity="0.7" />
+  </g>
+
+  <g fill="#8ec6ff">
+    <circle cx="1120" cy="180" r="2" opacity="0.5" />
+    <circle cx="1710" cy="330" r="2.5" opacity="0.35" />
+    <circle cx="1250" cy="880" r="1.8" opacity="0.45" />
+    <circle cx="1520" cy="200" r="1.5" opacity="0.4" />
+    <circle cx="1830" cy="620" r="2.2" opacity="0.3" />
+    <circle cx="900" cy="520" r="1.6" opacity="0.35" />
+    <circle cx="1050" cy="960" r="2" opacity="0.3" />
+    <circle cx="1480" cy="760" r="1.4" opacity="0.5" />
+    <circle cx="760" cy="860" r="1.8" opacity="0.2" />
+    <circle cx="1660" cy="980" r="2" opacity="0.28" />
+    <circle cx="1320" cy="60" r="1.5" opacity="0.4" />
+  </g>
+  <g fill="#2dd4bf">
+    <circle cx="1360" cy="700" r="2" opacity="0.4" />
+    <circle cx="1740" cy="820" r="1.6" opacity="0.35" />
+    <circle cx="1180" cy="430" r="1.4" opacity="0.3" />
+    <circle cx="1580" cy="120" r="1.8" opacity="0.22" />
+  </g>
+
+  <rect width="1920" height="1080" filter="url(#grain)" opacity="0.05" />
+</svg>

@@ -1,8 +1,7 @@
 import type { SkillGroup } from "@/types/resume";
 import { SectionHeading } from "./SectionHeading";
+import { SectionBackdrop } from "./SectionBackdrop";
 import { Reveal } from "./Reveal";
-import { motion } from "framer-motion";
-import { cardHover, staggerContainer, staggerItem } from "@/utils/cn";
 
 interface SkillsProps {
   skills: SkillGroup[];
@@ -14,12 +13,9 @@ export function Skills({ skills }: SkillsProps) {
   return (
     <section
       id="skills"
-      className="section-padding section-bg-dots relative overflow-hidden"
+      className="section-padding relative isolate overflow-hidden"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 top-0 h-[500px] w-[500px] rounded-full bg-brand-400/5 blur-[100px] dark:bg-brand-500/8"
-      />
+      <SectionBackdrop variant="dots" />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -29,19 +25,13 @@ export function Skills({ skills }: SkillsProps) {
           />
         </Reveal>
 
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-40px", amount: 0.1 }}
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((group, index) => (
-            <motion.div key={group.category} variants={staggerItem}>
+            <Reveal key={group.category} delay={index * 70}>
               <SkillCard group={group} index={index} />
-            </motion.div>
+            </Reveal>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -55,9 +45,8 @@ function SkillCard({ group, index }: { group: SkillGroup; index: number }) {
   ];
 
   return (
-    <motion.div
-      {...cardHover}
-      className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br p-6 backdrop-blur-sm dark:border-slate-800/60 ${gradients[index % gradients.length]}`}
+    <div
+      className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br p-6 backdrop-blur-sm transition-transform duration-300 ease-out hover:-translate-y-1.5 dark:border-slate-800/60 ${gradients[index % gradients.length]}`}
     >
       {/* Top gradient accent line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -72,6 +61,6 @@ function SkillCard({ group, index }: { group: SkillGroup; index: number }) {
           </li>
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 }
