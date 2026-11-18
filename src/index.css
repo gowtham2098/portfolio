@@ -1,3 +1,51 @@
+/* Metric-compatible fallbacks. Until the real font swaps in (or on a slow
+   connection where it never does), Arial/Courier New are scaled to Inter's
+   metrics so the swap causes no layout shift. Keep in sync with tailwind.config. */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+  size-adjust: 107.4%;
+}
+
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New");
+  ascent-override: 102%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+/* Self-hosted latin subsets (same variable files Google Fonts served). Keeping
+   them on the same origin removes the two extra third-party round trips
+   (fonts.googleapis.com CSS + fonts.gstatic.com font) from the critical path. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+  src: url("./assets/fonts/inter-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: optional;
+  src: url("./assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -238,4 +286,310 @@
 }
 .animate-status-fade {
   animation: status-fade-in 0.4s ease-out both;
+}
+
+/* Swapping the palette should be instant: no colour transitions mid-swap. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* ── Section ambient backdrops ─────────────────────────────────────────────── */
+/* Only transform/opacity animate so every layer stays on the compositor. */
+
+.section-backdrop {
+  contain: paint;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 9999px;
+  animation: ambient-drift-a 32s ease-in-out infinite;
+}
+
+.ambient-drift-a {
+  animation-name: ambient-drift-a;
+  animation-duration: 30s;
+}
+.ambient-drift-b {
+  animation-name: ambient-drift-b;
+  animation-duration: 38s;
+}
+.ambient-drift-c {
+  animation-name: ambient-drift-c;
+  animation-duration: 46s;
+}
+.ambient-delay-1 {
+  animation-delay: -8s;
+}
+.ambient-delay-2 {
+  animation-delay: -16s;
+}
+
+@keyframes ambient-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(48px, -36px, 0) scale(1.09);
+  }
+}
+@keyframes ambient-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+  50% {
+    transform: translate3d(-56px, 28px, 0) scale(0.94);
+  }
+}
+@keyframes ambient-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+  50% {
+    transform: translate3d(28px, 44px, 0) scale(1.12);
+  }
+}
+
+/* Seamless translate of an oversized (80px) grid pattern. */
+.ambient-grid-pan {
+  animation: ambient-grid-pan 36s linear infinite;
+}
+@keyframes ambient-grid-pan {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-80px, -80px, 0);
+  }
+}
+
+/* A soft band of light crossing the section. */
+.ambient-sweep {
+  animation: ambient-sweep 20s ease-in-out infinite;
+}
+.ambient-sweep-reverse {
+  animation-direction: reverse;
+  animation-duration: 26s;
+  animation-delay: -6s;
+}
+@keyframes ambient-sweep {
+  0% {
+    transform: translate3d(-140%, 0, 0);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(640%, 0, 0);
+    opacity: 0;
+  }
+}
+
+.ambient-aurora {
+  animation: ambient-spin 70s linear infinite;
+}
+@keyframes ambient-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scroll-linked depth: backdrops drift slightly slower than content.
+   Browsers without scroll timelines ignore this and stay static. */
+.ambient-depth {
+  animation: ambient-depth linear both;
+  animation-timeline: view();
+  animation-range: cover 0% cover 100%;
+}
+@keyframes ambient-depth {
+  from {
+    transform: translate3d(0, -22px, 0);
+  }
+  to {
+    transform: translate3d(0, 22px, 0);
+  }
+}
+
+/* ── Hero: floating code card ──────────────────────────────────────────────── */
+.hero-card-float {
+  animation: hero-card-float 9s ease-in-out infinite;
+}
+@keyframes hero-card-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+.hero-chip-float {
+  animation: hero-chip-float 7s ease-in-out infinite;
+}
+@keyframes hero-chip-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+/* Inline SVG noise: adds texture without a network request. */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.035;
+}
+
+/* ── Hero: pointer-tracked glow ────────────────────────────────────────────── */
+/* A fixed-size circle that is only ever translated, so following the cursor
+   costs a compositor move instead of repainting a full-screen gradient. */
+.hero-spotlight {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1000px;
+  height: 1000px;
+  margin-left: -500px;
+  margin-top: -500px;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  background-image: radial-gradient(
+    circle closest-side,
+    rgba(51, 133, 255, 0.12),
+    rgba(45, 212, 191, 0.05) 45%,
+    transparent 74%
+  );
+  transform: translate3d(var(--spot-x, -2000px), var(--spot-y, -2000px), 0);
+  transition: opacity 600ms ease-out;
+}
+
+.dark .hero-spotlight {
+  background-image: radial-gradient(
+    circle closest-side,
+    rgba(51, 133, 255, 0.18),
+    rgba(45, 212, 191, 0.07) 45%,
+    transparent 74%
+  );
+}
+
+.hero-spotlight[data-active="true"] {
+  opacity: 1;
+}
+
+/* ── Scroll reveal (IntersectionObserver adds .reveal-visible) ─────────────── */
+/* Content is visible unless JS has explicitly hidden an off-screen element, so
+   the first paint never waits on an opacity animation. */
+
+.reveal-hidden {
+  opacity: 0;
+  transition: none;
+}
+.reveal-hidden.reveal-fade-up {
+  transform: translate3d(0, 24px, 0);
+}
+.reveal-hidden.reveal-slide-left {
+  transform: translate3d(-32px, 0, 0);
+}
+.reveal-hidden.reveal-slide-right {
+  transform: translate3d(32px, 0, 0);
+}
+.reveal-hidden.reveal-scale-in {
+  transform: scale(0.92);
+}
+.reveal-hidden.reveal-blur-in {
+  filter: blur(12px);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Mobile nav (CSS-only open/close, no animation library) ────────────────── */
+
+.mobile-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease,
+    visibility 0s linear 0.4s;
+}
+
+.mobile-menu[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease,
+    visibility 0s;
+}
+
+.mobile-menu li,
+.mobile-menu .mobile-menu-cta {
+  opacity: 0;
+  transform: translateX(-16px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-menu[data-open="true"] li,
+.mobile-menu[data-open="true"] .mobile-menu-cta {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* Catch-all for reduced motion: freeze every decorative layer in its base
+   state instead of snapping it to the final keyframe. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb,
+  .ambient-grid-pan,
+  .ambient-sweep,
+  .ambient-aurora,
+  .ambient-depth,
+  .hero-card-float,
+  .hero-chip-float,
+  .hero-orb-1,
+  .hero-orb-2,
+  .hero-text {
+    animation: none !important;
+  }
+
+  .hero-spotlight {
+    display: none;
+    transition: none;
+  }
+
+  .mobile-menu,
+  .mobile-menu li,
+  .mobile-menu .mobile-menu-cta {
+    transition: none;
+  }
 }

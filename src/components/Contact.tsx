@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Github, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react";
 import type { ContactInfo } from "@/types/resume";
 import { SectionHeading } from "./SectionHeading";
+import { SectionBackdrop } from "./SectionBackdrop";
 import { Reveal } from "./Reveal";
 
 interface ContactProps {
@@ -76,7 +77,11 @@ export function Contact({ contact, name }: ContactProps) {
   };
 
   return (
-    <section id="contact" className="section-padding">
+    <section
+      id="contact"
+      className="section-padding relative isolate overflow-hidden"
+    >
+      <SectionBackdrop variant="beam" />
       <div className="section-container">
         <Reveal>
           <SectionHeading

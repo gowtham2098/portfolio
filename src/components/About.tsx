@@ -1,9 +1,8 @@
 import { Briefcase, GraduationCap, MapPin, Mail } from "lucide-react";
 import type { ResumeData } from "@/types/resume";
 import { SectionHeading } from "./SectionHeading";
+import { SectionBackdrop } from "./SectionBackdrop";
 import { Reveal } from "./Reveal";
-import { motion } from "framer-motion";
-import { staggerContainer, staggerItem, cardHover } from "@/utils/cn";
 
 interface AboutProps {
   resume: ResumeData;
@@ -28,12 +27,9 @@ export function About({ resume }: AboutProps) {
   return (
     <section
       id="about"
-      className="section-padding section-bg-mesh relative overflow-hidden"
+      className="section-padding relative isolate overflow-hidden"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-32 top-1/4 h-[400px] w-[400px] rounded-full bg-brand-400/5 blur-[80px] dark:bg-brand-500/8"
-      />
+      <SectionBackdrop variant="mesh" tint />
       <div className="section-container">
         <Reveal>
           <SectionHeading
@@ -64,42 +60,33 @@ export function About({ resume }: AboutProps) {
           </Reveal>
 
           <Reveal delay={200} variant="slide-right">
-            <motion.div
-              variants={staggerContainer}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, amount: 0.2 }}
-              className="grid grid-cols-2 gap-3"
-            >
-              {facts.map(({ icon: Icon, label, value, href }) => (
-                <motion.div
-                  key={label}
-                  variants={staggerItem}
-                  {...cardHover}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-5 backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-900/40"
-                >
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-100 dark:bg-brand-950/30 dark:text-brand-400 dark:group-hover:bg-brand-900/30">
-                    <Icon size={18} aria-hidden="true" />
+            <div className="grid grid-cols-2 gap-3">
+              {facts.map(({ icon: Icon, label, value, href }, i) => (
+                <Reveal key={label} delay={i * 70}>
+                  <div className="group relative h-full overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-5 backdrop-blur-sm transition-transform duration-300 ease-out hover:-translate-y-1 dark:border-slate-800/60 dark:bg-slate-900/40">
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-100 dark:bg-brand-950/30 dark:text-brand-400 dark:group-hover:bg-brand-900/30">
+                      <Icon size={18} aria-hidden="true" />
+                    </div>
+                    <dt className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      {label}
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-semibold break-words text-slate-900 dark:text-white">
+                      {href ? (
+                        <a
+                          href={href}
+                          className="transition-colors duration-300 hover:text-brand-600 dark:hover:text-brand-400"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        value
+                      )}
+                    </dd>
                   </div>
-                  <dt className="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    {label}
-                  </dt>
-                  <dd className="mt-1.5 text-sm font-semibold break-words text-slate-900 dark:text-white">
-                    {href ? (
-                      <a
-                        href={href}
-                        className="transition-colors duration-300 hover:text-brand-600 dark:hover:text-brand-400"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      value
-                    )}
-                  </dd>
-                </motion.div>
+                </Reveal>
               ))}
-            </motion.div>
+            </div>
           </Reveal>
         </div>
       </div>
