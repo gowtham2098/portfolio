@@ -20,6 +20,11 @@ const STATUSES = [
 
 const STATUS_INTERVAL_MS = 2000;
 
+const LIGHT_BG =
+  "https://res.cloudinary.com/b5xebk6c/image/upload/v1795092119/hero-light.svg";
+const DARK_BG =
+  "https://res.cloudinary.com/b5xebk6c/image/upload/v1795092119/hero-dark.svg";
+
 interface HeroProps {
   resume: ResumeData;
 }
@@ -80,14 +85,14 @@ export const Hero = memo(function Hero({ resume }: HeroProps) {
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
         <img
-          src="/hero/hero-light.svg"
+          src={LIGHT_BG}
           alt=""
           decoding="async"
           fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover object-[72%_50%] opacity-90 dark:hidden"
         />
         <img
-          src="/hero/hero-dark.svg"
+          src={DARK_BG}
           alt=""
           decoding="async"
           className="absolute inset-0 hidden h-full w-full object-cover object-[72%_50%] opacity-95 dark:block"
